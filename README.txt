@@ -50,12 +50,14 @@ but havent tried to compile it.
 ==================================
 
 ToDo:
-	- Servers Thread
-		- Delete expired sessions
-		- Delete expired servers
-	- Check comments to find more
+	- Check birthday and server age limit
+	- Maybe commands in the main thread
+	- Comments
+	- Linux Compatibility (halfway)
 
 Note:
 	The ip field from the game_servers table must be little endian
+	example: 
+		to use 127.0.0.1 insert in the DB INET_ATON(1.0.0.127)
 
 http://infiniterasa.com/
