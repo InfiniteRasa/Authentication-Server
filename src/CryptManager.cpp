@@ -1,5 +1,21 @@
 #include "CryptManager.h"
 
+CryptManager* CryptManager::Pointer = 0;
+
+CryptManager* CryptManager::Instance()
+{
+	return CryptManager::Pointer;
+}
+
+CryptManager* CryptManager::Create()
+{
+	if (CryptManager::Pointer == 0)
+	{
+		CryptManager::Pointer = new CryptManager();
+	}
+	return CryptManager::Pointer;
+}
+
 CryptManager::CryptManager()
 {
 	this->DecStruct2_CEA1B0 = (_DecStruct2T*)CEA1B0_DATA;

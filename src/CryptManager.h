@@ -61,7 +61,8 @@ class CryptManager
 	static unsigned char	OutputData_D22D48[128*16];
 
 	public:
-		CryptManager();
+		static CryptManager* Instance();
+		static CryptManager* Create();
 		~CryptManager();
 
 		// MD5 function
@@ -77,7 +78,12 @@ class CryptManager
 		void TREncrypt(unsigned char *Data, unsigned int Len);
 		void TRDecrypt(unsigned char *Data, unsigned int Len);
 		
+	protected:
+		CryptManager();
+
 	private:
+		static CryptManager* Pointer;
+
 		// Blowfish structs
 		BLOWFISH_CTX BlowfishContext;
 

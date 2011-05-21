@@ -1,5 +1,21 @@
 #include "DBManager.h"
 
+DBManager* DBManager::Pointer = 0;
+
+DBManager* DBManager::Instance()
+{
+	return DBManager::Pointer;
+}
+
+DBManager* DBManager::Create(const char* dbHost, unsigned int dbPort, const char* dbUser, const char* dbPass, const char* dbName)
+{
+	if (DBManager::Pointer == 0)
+	{
+		DBManager::Pointer = new DBManager(dbHost, dbPort, dbUser, dbPass, dbName);
+	}
+	return DBManager::Pointer;
+}
+
 DBManager::DBManager(const char* dbHost, unsigned int dbPort, const char* dbUser, const char* dbPass, const char* dbName)
 {
 	this->dbHost = std::string(dbHost);

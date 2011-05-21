@@ -1,7 +1,7 @@
 #include "NetUtils.h"
 
 
-	void Net::SendEncrypted(SOCKET s, const char* buff, int len, CryptManager* Crypt)
+	void Net::SendEncrypted(SOCKET s, const char* buff, int len)
 	{
 		char buffer[128];
 		int length = len;
@@ -23,7 +23,7 @@
 		//Encrypt it
 		for(int p=0; p<(length-2)/8; p++)
 		{
-			Crypt->BFEncrypt((unsigned long*)&buffer[p*8+2], (unsigned long*)&buffer[6 + p*8]);
+			CryptManager::Instance()->BFEncrypt((unsigned long*)&buffer[p*8+2], (unsigned long*)&buffer[6 + p*8]);
 		}
 		send(s, buffer, length, 0);
 	}

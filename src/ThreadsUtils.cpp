@@ -31,6 +31,7 @@
 			return false;
 		}
 		pthread_attr_destroy(&attr);
+		Thread::IncreaseCount();
 		return true;
 	}
 
@@ -40,6 +41,7 @@
 		{
 			return false;
 		}
+		Thread::DecreaseCount();
 		return true;
 	}
 
@@ -51,5 +53,25 @@
 
 	void Thread::Exit()
 	{
+		Thread::DecreaseCount();
 		pthread_exit((void*) 0);
+	}
+
+	unsigned int Thread::Count()
+	{
+		return Thread::ThreadsCount;
+	}
+
+	void Thread::IncreaseCount()
+	{
+		Thread::LockMutex();
+		Thread::ThreadsCount += 1;
+		Thread::UnlockMutex();
+	}
+
+	void Thread::DecreaseCount()
+	{
+		Thread::LockMutex();
+		Thread::ThreadsCount -= 1;
+		Thread::UnlockMutex();
 	}

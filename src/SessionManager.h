@@ -1,7 +1,6 @@
 // ToDo
 // Add IP to sessions for checking
 // Maybe change struct for class
-// Maybe move SESSION_TIMEOUT for dynamic assignation
 
 #ifndef TR_SESSION_MANAGER_H
 #define TR_SESSION_MANAGER_H
@@ -14,44 +13,32 @@
 #include <sstream>
 #include <string>
 #include "DBManager.h"
-
-struct SESSION
-{
-	union
-	{
-		struct
-		{
-			unsigned int SessionID1;
-			unsigned int SessionID2;
-		};
-		unsigned long long SessionID;
-	};
-	union
-	{
-		struct
-		{
-		unsigned int UID1;
-		unsigned int UID2;
-		};
-		signed long long UID;
-	};
-	std::string AccountName;
-	unsigned int CheckTime;
-};
+#include "ThreadsUtils.h"
 
 class SessionManager
 {
 	public:
-		SessionManager(unsigned int SessionTimeout = 50000);
+		static SessionManager* Instance();
+		static SessionManager* Create(unsigned int SessionTimeout, unsigned int ServerTimeout);
+		
 		~SessionManager();
 
-		unsigned long long GenerateSession(const char* AccountName, signed long long UID, DBManager* DB);
+		unsigned long long GenerateSession(const char* AccountName, signed long long UID);
+		void WipeSessions();
+		void WipeServers();
+		void RemoveExpiredSessions();
+		void RemoveExpiredServers();
+
+		unsigned int SessionTimeout;
+		unsigned int ServerTimeout;
+
+	protected:
+		SessionManager(unsigned int SessionTimeout, unsigned int ServerTimeout);
 
 	private:
-		unsigned int SessionTimeout;
+		static SessionManager* Pointer;
 
 		unsigned long long GenerateUniqueKey();
-		void RemoveExpiredSessions();
 };
 
 #endif

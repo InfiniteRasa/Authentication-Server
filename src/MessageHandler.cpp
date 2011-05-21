@@ -1,24 +1,24 @@
 #include "MessageHandler.h"
 
-void HandleMessage::ErrorAccBlocked(Player* player, CryptManager* Crypt)
+void HandleMessage::ErrorAccBlocked(Player* player)
 {
 	Packet::ErrorAccBlocked packet;
 	packet.PacketLength = 0x07;
 	packet.OPCode		= OPCode::AuthEAB;
 	packet.ErrorID		= 0x00;
 
-	Net::SendEncrypted(player->socket, (char*)&packet, 0x07, Crypt);
+	Net::SendEncrypted(player->socket, (char*)&packet, 0x07);
 	return;
 }
 
-void HandleMessage::AuthError(Player* player, TR_BYTE ErrorCode, CryptManager* Crypt)
+void HandleMessage::AuthError(Player* player, TR_BYTE ErrorCode)
 {
 	Packet::AuthError packet;
 	packet.PacketLength = 0x07;
 	packet.OPCode		= OPCode::AuthE;
 	packet.ErrorID		= ErrorCode;
 
-	Net::SendEncrypted(player->socket, (char*)&packet, 0x07, Crypt);
+	Net::SendEncrypted(player->socket, (char*)&packet, 0x07);
 	return;
 }
 
@@ -34,12 +34,12 @@ void HandleMessage::AuthHello(Player* player)
 	return;
 }
 
-void HandleMessage::AuthLogin(Player* player, CryptManager* Crypt, DBManager* DB, pthread_mutex_t* Mutex)
+void HandleMessage::AuthLogin(Player* player)
 {
-	Thread::LockMutex(Mutex);
+	Thread::LockMutex();
 	for(int i=0; i<(0x32-2)/8; i++)
 	{
-		Crypt->BFDecrypt((unsigned long*)&player->RecvBuffer[2+i*8], 
+		CryptManager::Instance()->BFDecrypt((unsigned long*)&player->RecvBuffer[2+i*8], 
 						 (unsigned long*)&player->RecvBuffer[2+i*8+4]);
 	}
 
@@ -47,34 +47,34 @@ void HandleMessage::AuthLogin(Player* player, CryptManager* Crypt, DBManager* DB
 	memcpy((void*)&packet, (void*)player->RecvBuffer, sizeof(Packet::AuthLogin));
 
 	if (packet.OPCode != OPCode::AuthL)
-	{ Net::Close(player->socket); Thread::UnlockMutex(Mutex); Thread::Exit(); return; }
+	{ Net::Close(player->socket); Thread::UnlockMutex(); Thread::Exit(); return; }
 
 	// Check the GameID and CDKey, both are hardcoded
 	if (packet.GameID != 0x08 || packet.CDKey != 0x01)
-	{ Net::Close(player->socket); Thread::UnlockMutex(Mutex); Thread::Exit(); return; }
+	{ Net::Close(player->socket); Thread::UnlockMutex(); Thread::Exit(); return; }
 
-	Crypt->TRDecrypt((unsigned char*)&packet.UserData, 30);
+	CryptManager::Instance()->TRDecrypt((unsigned char*)&packet.UserData, 30);
 	memcpy((void*)player->Account,	(void*)(char*)packet.UserData,    14);
 	memcpy((void*)player->Password, (void*)((char*)packet.UserData+14), 16);
 
-	int LoginOK = DB->ValidatePlayer((char*)player->Account, 
-									  Crypt->GenMD5((char*)player->Password, strlen(player->Password)).c_str(), &player->AccUID);
-	Thread::UnlockMutex(Mutex);
+	int LoginOK = DBManager::Instance()->ValidatePlayer((char*)player->Account, 
+									  CryptManager::Instance()->GenMD5((char*)player->Password, strlen(player->Password)).c_str(), &player->AccUID);
+	Thread::UnlockMutex();
 
 	switch (LoginOK)
 	{
 		case -1: // Account not found
-			HandleMessage::AuthError(player, AuthError::INVALID_PASSWORD, Crypt);
+			HandleMessage::AuthError(player, AuthError::INVALID_PASSWORD);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
 		case 0:
 			break;
 		case 1: // Account blocked
-			HandleMessage::ErrorAccBlocked(player, Crypt);
+			HandleMessage::ErrorAccBlocked(player);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
 		case 2: // Account already logged
-			HandleMessage::AuthError(player, AuthError::ALREADY_LOGGED_IN, Crypt);
+			HandleMessage::AuthError(player, AuthError::ALREADY_LOGGED_IN);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
 	}
@@ -82,7 +82,7 @@ void HandleMessage::AuthLogin(Player* player, CryptManager* Crypt, DBManager* DB
 	return;
 }
 
-void HandleMessage::AuthLoginOk(Player* player, CryptManager* Crypt)
+void HandleMessage::AuthLoginOk(Player* player)
 {
 	// related to subscription, need info
 	Packet::AuthLoginOk packet;
@@ -99,30 +99,30 @@ void HandleMessage::AuthLoginOk(Player* player, CryptManager* Crypt)
 	packet.Unknown9		= 0x00;
 	packet.Unknown10	= 0x00;
 
-	Net::SendEncrypted(player->socket, (char*)&packet, 0x28, Crypt);
+	Net::SendEncrypted(player->socket, (char*)&packet, 0x28);
 	return;
 }
 
-void HandleMessage::AuthRequestServerList(Player* player, pthread_mutex_t* Mutex)
+void HandleMessage::AuthRequestServerList(Player* player)
 {
-		Thread::LockMutex(Mutex);
+		Thread::LockMutex();
 		Packet::AuthRequestServerList packet;
 		memcpy((void*)&packet, (void*)player->RecvBuffer, sizeof(Packet::AuthRequestServerList));
 
 		if (packet.OPCode != OPCode::AuthRSL)
-		{ Net::Close(player->socket); Thread::UnlockMutex(Mutex); Thread::Exit(); return; }
-		Thread::UnlockMutex(Mutex);
+		{ Net::Close(player->socket); Thread::UnlockMutex(); Thread::Exit(); return; }
+		Thread::UnlockMutex();
 		// Add something here? 
 		return;
 }
 
-void HandleMessage::AuthServerListEx(Player* player, CryptManager* Crypt, DBManager* DB, pthread_mutex_t* Mutex)
+void HandleMessage::AuthServerListEx(Player* player)
 {
-	Thread::LockMutex(Mutex);
+	Thread::LockMutex();
 	MYSQL_ROW row;
-	DB->Query("SELECT * FROM `game_servers`");
-	MYSQL_RES* result = DB->StoreResult();
-	unsigned char NumberOfServers = (unsigned char)DB->NumRows(result);
+	DBManager::Instance()->Query("SELECT * FROM `game_servers`");
+	MYSQL_RES* result = DBManager::Instance()->StoreResult();
+	unsigned char NumberOfServers = (unsigned char)DBManager::Instance()->NumRows(result);
 	char* buffer;
 	buffer = (char*)malloc(sizeof(Packet::AuthServerListEx) + (sizeof(Packet::SLServer) * NumberOfServers));
 	Packet::AuthServerListEx* packet = (Packet::AuthServerListEx*)buffer;
@@ -136,7 +136,7 @@ void HandleMessage::AuthServerListEx(Player* player, CryptManager* Crypt, DBMana
 		for (int i=0; i<packet->ServerCount; i++)
 		{
 			Packet::SLServer* server = (Packet::SLServer*)(buffer + sizeof(Packet::AuthServerListEx) + (sizeof(Packet::SLServer) * i));
-			row = DB->FetchRow(result);
+			row = DBManager::Instance()->FetchRow(result);
 			server->ServerID			= (unsigned char)atoi(row[0]);
 			server->Host				= strtoul(row[1],NULL,10);
 			server->Port				= atoi(row[2]);
@@ -147,35 +147,35 @@ void HandleMessage::AuthServerListEx(Player* player, CryptManager* Crypt, DBMana
 			server->ServerStatus		= (unsigned char)atoi(row[7]);
 		}
 	}
-	Thread::UnlockMutex(Mutex);
-	Net::SendEncrypted(player->socket, buffer, sizeof(Packet::AuthServerListEx) + (sizeof(Packet::SLServer) * NumberOfServers), Crypt);
+	Thread::UnlockMutex();
+	Net::SendEncrypted(player->socket, buffer, sizeof(Packet::AuthServerListEx) + (sizeof(Packet::SLServer) * NumberOfServers));
 	free(buffer);
 	return;
 }
 
-unsigned char HandleMessage::AuthSelectServer(Player* player, pthread_mutex_t* Mutex)
+unsigned char HandleMessage::AuthSelectServer(Player* player)
 {
-	Thread::LockMutex(Mutex);
+	Thread::LockMutex();
 	Packet::AuthSelectServer packet;
 	memcpy((void*)&packet, (void*)player->RecvBuffer, sizeof(Packet::AuthSelectServer));
-	Thread::UnlockMutex(Mutex);
+	Thread::UnlockMutex();
 	if (packet.OPCode != OPCode::AuthSS)
-	{ Net::Close(player->socket); Thread::UnlockMutex(Mutex); Thread::Exit(); return -1; }
+	{ Net::Close(player->socket); Thread::UnlockMutex(); Thread::Exit(); return -1; }
 	// Something more?
 	return (unsigned char)packet.ServerID;
 }
 
-void HandleMessage::LastPacket(Player* player, unsigned char ServerID, CryptManager* Crypt, SessionManager* Sessions, DBManager* DB, pthread_mutex_t* Mutex)
+void HandleMessage::LastPacket(Player* player, unsigned char ServerID)
 {
-	Thread::LockMutex(Mutex);
-	unsigned long long sessionID = Sessions->GenerateSession(player->Account, player->AccUID, DB);
+	Thread::LockMutex();
+	unsigned long long sessionID = SessionManager::Instance()->GenerateSession(player->Account, player->AccUID);
 	Packet::LastPacket packet;
 	packet.PacketLength = 0x0C;
 	packet.OPCode = OPCode::AuthLP;
 	packet.SessionID1 = (unsigned int)(sessionID & 0xFFFFFFFF);
 	packet.SessionID2 = (unsigned int)(sessionID >> 32);
 	packet.ServerID = ServerID;	
-	Thread::UnlockMutex(Mutex);
-	Net::SendEncrypted(player->socket, (char*)&packet, 0xC, Crypt);
+	Thread::UnlockMutex();
+	Net::SendEncrypted(player->socket, (char*)&packet, 0xC);
 	return;
 }

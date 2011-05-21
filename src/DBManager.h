@@ -11,7 +11,9 @@
 class DBManager
 {
 	public:
-		DBManager(const char* dbHost, unsigned int dbPort, const char* dbUser, const char* dbPass, const char* dbName);
+		static DBManager* Instance();
+		static DBManager* Create(const char* dbHost, unsigned int dbPort, const char* dbUser, const char* dbPass, const char* dbName);
+		
 		~DBManager();
 
 		bool Query(const char* query);
@@ -21,7 +23,12 @@ class DBManager
 		void FreeResult(MYSQL_RES* result);
 		int ValidatePlayer(const char* Name, const char* Password, signed long long* UID);
 
+	protected:
+		DBManager(const char* dbHost, unsigned int dbPort, const char* dbUser, const char* dbPass, const char* dbName);
+
 	private:
+		static DBManager* Pointer;
+
 		MYSQL*				dbHandle;
 		std::string			dbHost;
 		unsigned int		dbPort;

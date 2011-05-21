@@ -27,7 +27,7 @@
 
 namespace Net
 {
-	void SendEncrypted(SOCKET s, const char* buff, int len, CryptManager* Crypt);
+	void SendEncrypted(SOCKET s, const char* buff, int len);
 	void SendPlain(SOCKET s, const char* buff, int len);
 	int Receive(SOCKET s, char* buff, int len, bool clear=false, int size=128);
 	void SetTimeout(SOCKET s, int time);

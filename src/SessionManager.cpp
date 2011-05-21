@@ -1,15 +1,32 @@
 #include "SessionManager.h"
 
-SessionManager::SessionManager(unsigned int SessionTimeout)
+SessionManager* SessionManager::Pointer = 0;
+
+SessionManager* SessionManager::Instance()
+{
+	return SessionManager::Pointer;
+}
+
+SessionManager* SessionManager::Create(unsigned int SessionTimeout, unsigned int ServerTimeout)
+{
+	if (SessionManager::Pointer == 0)
+	{
+		SessionManager::Pointer = new SessionManager(SessionTimeout, ServerTimeout);
+	}
+	return SessionManager::Pointer;
+}
+
+SessionManager::SessionManager(unsigned int SessionTimeout, unsigned int ServerTimeout)
 {
 	this->SessionTimeout = SessionTimeout;
+	this->ServerTimeout = ServerTimeout;
 }
 
 SessionManager::~SessionManager()
 {
 }
 
-unsigned long long SessionManager::GenerateSession(const char* AccountName, signed long long UID, DBManager* DB)
+unsigned long long SessionManager::GenerateSession(const char* AccountName, signed long long UID)
 {
 	unsigned long long SessionID;
 	unsigned int SessionID1;
@@ -31,7 +48,7 @@ unsigned long long SessionManager::GenerateSession(const char* AccountName, sign
 	query << sUID << ",";
 	query << "'" << std::string(AccountName) << "',";
 	query << "NULL" << ")";
-	DB->Query(query.str().c_str());
+	DBManager::Instance()->Query(query.str().c_str());
 	// ToDo: Error Checking
 	return SessionID;
 }
@@ -52,22 +69,46 @@ unsigned long long SessionManager::GenerateUniqueKey()
 	return Key;
 }
 
+void SessionManager::WipeSessions()
+{
+	Thread::LockMutex();
+	DBManager::Instance()->Query("DELETE FROM sessions");
+	Thread::UnlockMutex();
+}
+
+void SessionManager::WipeServers()
+{
+	Thread::LockMutex();
+	DBManager::Instance()->Query("DELETE FROM game_servers WHERE static='0'");
+	Thread::UnlockMutex();
+}
+
 void SessionManager::RemoveExpiredSessions()
 {
-	/*
-	unsigned int CurrentTime = GetTickCount();
-	unsigned int index = 0;
-	while (index < this->Sessions.size())
-	{
-		unsigned int TimeAlive = CurrentTime - this->Sessions[index].CheckTime;
-		if (TimeAlive >= this->SessionTimeout)
-		{
-			RemoveSession(index);
-		}
-		else
-		{
-			index++;
-		}
-	}
-	*/
+	std::stringstream converter;
+	std::string Timeout;
+	converter << SessionManager::SessionTimeout; converter >> Timeout; converter.clear();
+
+	std::string Query = std::string("");
+	Query += "DELETE FROM sessions WHERE (TIMESTAMPDIFF(SECOND, checktime,CURRENT_TIMESTAMP())) > ";
+	Query += Timeout;
+	Thread::LockMutex();
+	DBManager::Instance()->Query(Query.c_str());
+	Thread::UnlockMutex();
 }
+
+void SessionManager::RemoveExpiredServers()
+{
+	std::stringstream converter;
+	std::string Timeout;
+	converter << SessionManager::ServerTimeout; converter >> Timeout; converter.clear();
+
+	std::string Query = std::string("");
+	Query += "DELETE FROM game_servers WHERE (TIMESTAMPDIFF(SECOND, check_time, CURRENT_TIMESTAMP())) > ";
+	Query += Timeout;
+	Thread::LockMutex();
+	DBManager::Instance()->Query(Query.c_str());
+	Thread::UnlockMutex();
+}
+
+// DELETE FROM sessions WHERE checktime > (CURRENT_TIMESTAMP() - 50)
