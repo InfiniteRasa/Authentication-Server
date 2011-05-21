@@ -106,6 +106,7 @@ void SessionManager::RemoveExpiredServers()
 	std::string Query = std::string("");
 	Query += "DELETE FROM game_servers WHERE (TIMESTAMPDIFF(SECOND, check_time, CURRENT_TIMESTAMP())) > ";
 	Query += Timeout;
+	Query += " AND static='0'";
 	Thread::LockMutex();
 	DBManager::Instance()->Query(Query.c_str());
 	Thread::UnlockMutex();
