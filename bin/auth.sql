@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `game_servers` (
 --
 
 INSERT INTO `game_servers` (`server_id`, `host`, `port`, `age_limit`, `pk_flag`, `current_users`, `max_users`, `status`, `check_time`, `static`) VALUES
-(53, 16777343, 8001, 18, 1, 1, 100, 1, '2011-05-01 18:04:50', 1);
+(234, '127.0.0.1', 8001, 18, 1, 1, 100, 1, '2011-05-01 18:04:50', 1);
 
 -- --------------------------------------------------------
 
@@ -59,13 +59,6 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `account` varchar(30) NOT NULL,
   `checktime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `sessions`
---
-
-INSERT INTO `sessions` (`session_id1`, `session_id2`, `uid`, `account`, `checktime`) VALUES
-(3340575638, 2318843403, 1, 'manolo', '2011-05-01 14:06:35');
 
 -- --------------------------------------------------------
 
@@ -88,4 +81,4 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `birthday`, `blocked`, `logged_in`) VALUES
-(1, 'manolo', '12cdb9b24211557ef1802bf5a875fd2c', '0000-00-00', 0, 0);
+(1, 'test', '098f6bcd4621d373cade4e832627b4f6', '2011-05-10', 0, 0);

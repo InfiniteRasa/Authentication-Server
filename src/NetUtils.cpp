@@ -40,6 +40,7 @@
 			memset((void*)buff, 0x00, size);
 		}
 		int ret = recv(s, buff, len, 0);
+		// printf("result: %i\r\n", ret);
 		return ret;
 	}
 
@@ -78,4 +79,13 @@
 	void Net::PrintIP(unsigned int IP)
 	{
 		printf("%d.%d.%d.%d", (IP&0xFF), ((IP>>8)&0xFF), ((IP>>16)&0xFF), ((IP>>24)&0xFF));
+	}
+
+	// 127.0.0.1 -> 1.0.0.127 -> 0x0100007F
+	unsigned int Net::IPtoHex(char* ip)
+	{
+		unsigned int a, b, c, d, ret;
+		sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d);
+		ret = a | (b<<8) | (c<<16) | (d<<24);
+		return ret;
 	}

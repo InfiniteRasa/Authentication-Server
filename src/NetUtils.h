@@ -34,6 +34,7 @@ namespace Net
 	void Close(SOCKET s);
 	unsigned int NumericIP(SOCKET s);
 	void PrintIP(unsigned int IP);
+	unsigned int IPtoHex(char* ip);
 }
 
 #endif

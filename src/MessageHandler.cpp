@@ -64,16 +64,19 @@ void HandleMessage::AuthLogin(Player* player)
 	switch (LoginOK)
 	{
 		case -1: // Account not found
+			printf("Account not found: %s\n", player->Account);
 			HandleMessage::AuthError(player, AuthError::INVALID_PASSWORD);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
 		case 0:
 			break;
 		case 1: // Account blocked
+			printf("Account blocked: %s\n", player->Account);
 			HandleMessage::ErrorAccBlocked(player);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
 		case 2: // Account already logged
+			printf("Account already logged: %s\n", player->Account);
 			HandleMessage::AuthError(player, AuthError::ALREADY_LOGGED_IN);
 			Net::Close(player->socket); Thread::Exit(); return;
 			break;
@@ -138,7 +141,7 @@ void HandleMessage::AuthServerListEx(Player* player)
 			Packet::SLServer* server = (Packet::SLServer*)(buffer + sizeof(Packet::AuthServerListEx) + (sizeof(Packet::SLServer) * i));
 			row = DBManager::Instance()->FetchRow(result);
 			server->ServerID			= (unsigned char)atoi(row[0]);
-			server->Host				= strtoul(row[1],NULL,10);
+			server->Host				= Net::IPtoHex(row[1]);
 			server->Port				= atoi(row[2]);
 			server->AgeLimit			= (unsigned char)atoi(row[3]);
 			server->PKFlag				= (unsigned char)atoi(row[4]);

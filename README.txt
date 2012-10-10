@@ -1,24 +1,24 @@
 To run it on Windows:
-	- Setup a MySQL database (i use usbwebserver)
+	- Setup a MySQL database (ex: usbwebserver)
 	- Import the bin/auth.sql file
 	- Modify the bin/config.ini file to fit your configuration
 	- Open AuthServer.exe
 	- Open Tabula Rasa client
-	- Log in as manolo/manolo (lol)
+	- Log in as test/test
 	- Nothing more without a game server
 
 ==================================
 
 Classes/Namespaces explanation:
 
-DBManager - Handles the DB connection and querys, also validates players
-Cryptmanager - Contains the Blowfish and custom algorithms functions
+DBManager      - Handles the DB connection and querys, also validates players
+Cryptmanager   - Contains the Blowfish and custom algorithms functions
 SessionManager - Handles the generation and deletion of sessions
-INIParser - parses the ini file lol
-NetManager - along NetUtils, abstracts socket functions for corssplatfom work
-ThreadUtils - Simplifies threads usage
+INIParser      - Parses the ini file
+NetManager     - along NetUtils, abstracts socket functions for crossplatfom work
+ThreadUtils    - Simplifies threads usage
 MessageHandler - All the specific logic goes here, handles all the packets
-NetObjects - Simplifies the opcode, packet and errors usage
+NetObjects     - Simplifies the opcode, packet and errors usage
 
 ==================================
 
@@ -44,20 +44,14 @@ Preprocessor:
 	
 ==================================
 
-There is some support for Linux,
-but havent tried to compile it.
+Linux support is on the way
 
 ==================================
 
 ToDo:
 	- Check birthday and server age limit
-	- Maybe commands in the main thread
+	- Maybe commands/interface in the main thread
 	- Comments
 	- Linux Compatibility (halfway)
-
-Note:
-	The ip field from the game_servers table must be little endian
-	example: 
-		to use 127.0.0.1 insert in the DB INET_ATON(1.0.0.127)
-
-http://infiniterasa.com/
+	
+Love, Salsa Crew
