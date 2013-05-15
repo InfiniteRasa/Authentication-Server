@@ -27,7 +27,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `game_servers` (
   `server_id` int(11) NOT NULL,
-  `host` int(11) NOT NULL,
+  `host` varchar(25) NOT NULL,
   `port` int(11) NOT NULL,
   `age_limit` int(11) NOT NULL,
   `pk_flag` int(11) NOT NULL,
