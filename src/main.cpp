@@ -21,7 +21,7 @@ void* PlayersThread(void* Parameter);
 void* PlayerHandling(void* Parameter);
 unsigned int ClientsNow();
 
-int main()
+int main(int argc, char *argv[])
 {
 	printf(" ==============================================================================\r\n");
 	printf("                                  Tabula Rasa                                  \r\n");
@@ -92,6 +92,16 @@ int main()
 	{ printf("Done\r\n\r\n"); } else { printf("Error\r\n\r\n"); }
 
 	printf("Authentication Server running\r\n");
+	if (argc == 2 && !strcmp(argv[1], "-hidden"))
+	{
+#ifdef _WIN32
+		printf("Hidden mode enabled, going underground\r\n");
+		HWND hWnd = GetConsoleWindow();
+		ShowWindow(hWnd, SW_HIDE);
+#else
+		printf("Hidden mode not supported on this OS\r\n");
+#endif
+	}
 	printf("Type q to close the server\r\n");
 	char c;
 	while(ServerRunning)
