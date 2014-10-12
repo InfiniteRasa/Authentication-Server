@@ -22,15 +22,16 @@ NetObjects     - Simplifies the opcode, packet and errors usage
 
 ==================================
 
-To compile in Windows (at least in MSVC):
+To compile on Windows (at least in MSVC):
 -------------------------------------------
 Include folders:
-	.\pthreads\include
-	.\mysql
+	.\libs\minINI
+	.\libs\pthreads\include
+	.\libs\mysql
 -------------------------------------------
 Lib folders:
-	.\mysql
-	.\pthreads\lib
+	.\libs\mysql
+	.\libs\pthreads\lib
 -------------------------------------------
 Libs
 	libmysql.lib 
@@ -44,7 +45,21 @@ Preprocessor:
 	
 ==================================
 
-Linux support is on the way
+To compile on Linux:
+-------------------------------------------
+install libmysqlclient-dev
+-------------------------------------------
+Include folders:
+	./libs/minINI
+	`mysql_config --cflags`
+-------------------------------------------
+Lib folders:
+	`mysql_config --libs`
+
+==================================
+
+CodeLite project (and makefile) for linux available.
+Tested on Debian 7.
 
 ==================================
 
@@ -52,6 +67,5 @@ ToDo:
 	- Check birthday and server age limit
 	- Maybe commands/interface in the main thread
 	- Comments
-	- Linux Compatibility (halfway)
 	
 Love, Salsa Crew
