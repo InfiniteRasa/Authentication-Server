@@ -150,7 +150,7 @@ void* PlayersThread(void* Parameter)
 				Net::Close(NewClient);
 			}
 		}
-		Sleep(100);
+		Thread::Wait(100);
 	}
 	Thread::Exit();
 	return 0;
@@ -166,18 +166,20 @@ void* PlayerHandling(void* Parameter)
 	if (Net::Receive(player.socket, (char*)player.RecvBuffer, 0x32, true) < 1)
 	{ 
 		printf("Error receiving AuthLogin packet\r\n");
+		#ifdef _WIN32
 		int ret = WSAGetLastError();
 		printf("WSA Last Error: %i\r\n", ret);
+		#endif
 		Net::Close(player.socket); Thread::Exit(); return 0; 
 	}
 	HandleMessage::AuthLogin(&player);
 	HandleMessage::AuthLoginOk(&player);
 	// This part is the <different packets allowed>
-	int start = GetTickCount();
+	int start = Thread::GetTicks();
 	unsigned char ServerID;
 	while (1)
 	{ 
-		if ((GetTickCount() - start) > (10*1000))
+		if ((Thread::GetTicks() - start) > (10*1000))
 		{ 
 			HandleMessage::AuthError(&player, AuthError::KICKED);
 			printf("Time limit reached, kicking\r\n");
@@ -197,7 +199,7 @@ void* PlayerHandling(void* Parameter)
 			}
 			if (player.RecvBuffer[2] == OPCode::AuthRSL)
 			{
-					start = GetTickCount(); // Reset timeout
+					start = Thread::GetTicks(); // Reset timeout
 					HandleMessage::AuthRequestServerList(&player);
 					HandleMessage::AuthServerListEx(&player);
 			}
@@ -227,7 +229,7 @@ void* MaintenanceThread(void* Parameter)
 	{		
 		SessionManager::Instance()->RemoveExpiredSessions();
 		SessionManager::Instance()->RemoveExpiredServers();
-		Sleep(SessionTimeout * 500);
+		Thread::Wait(SessionTimeout * 500);
 	}
 	Thread::Exit();
 	return 0;

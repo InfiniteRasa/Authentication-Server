@@ -31,7 +31,7 @@ DBManager::DBManager(const char* dbHost, unsigned int dbPort, const char* dbUser
 	if (this->dbHandle == NULL)
 	{
 		printf("MySQL: %s", mysql_error(dbHandleErr));
-		Sleep(10*1000);
+		Thread::Wait(10*1000);
 	}
 }
 

@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#ifndef _WIN32
+#include <sys/time.h>
+#include <unistd.h>
+#endif
 
 extern pthread_mutex_t gMutex;
 
@@ -23,5 +27,9 @@ namespace Thread
 	unsigned int  Count();
 	void IncreaseCount();
 	void DecreaseCount();
+	
+	void Wait(int millisecs);
+	
+	unsigned long GetTicks();
 }
 #endif

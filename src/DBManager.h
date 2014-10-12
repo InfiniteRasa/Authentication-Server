@@ -5,8 +5,12 @@
 #include <string>
 #ifdef _WIN32
 	#include <windows.h>
+#else
+	#include <stdlib.h>
 #endif
 #include <mysql.h>
+
+#include "ThreadsUtils.h"
 
 class DBManager
 {

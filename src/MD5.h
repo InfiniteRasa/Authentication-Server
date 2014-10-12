@@ -33,6 +33,9 @@ documentation and/or software.
 #ifndef BZF_MD5_H
 #define BZF_MD5_H
 
+#ifndef _WIN32
+#include <cstring>
+#endif
 #include <string>
 #include <iostream>
 

@@ -10,7 +10,7 @@ NetManager::NetManager(unsigned int Port)
 	if (this->Socket == SOCKET_ERROR)
 	{
 		printf("Error: Could not open communication port\n");
-		Sleep(10*1000);
+		Thread::Wait(10*1000);
 	}
 }
 
@@ -47,7 +47,7 @@ SOCKET NetManager::CreateSocket(unsigned short Port)
 	memset(&addr, 0, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(Port);
-	addr.sin_addr.s_addr = ADDR_ANY;
+	addr.sin_addr.s_addr = 0;//ADDR_ANY;
 	if( bind(s, (SOCKADDR*)&addr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR )
 	{
 		Net::Close(s);

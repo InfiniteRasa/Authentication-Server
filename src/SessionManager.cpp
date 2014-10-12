@@ -57,7 +57,7 @@ unsigned long long SessionManager::GenerateUniqueKey()
 {
 	unsigned long long Key;
 	
-	unsigned int GenTime = GetTickCount();
+	unsigned int GenTime = Thread::GetTicks();
 	Key = rand() + GenTime;
 	for (int i=0; i<30; i++)
 	{

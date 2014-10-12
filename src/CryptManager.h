@@ -6,6 +6,8 @@
 
 #ifdef _WIN32
 	#include "windows.h"
+	#else
+	#include <cstring>
 #endif
 #include <string>
 #include "MD5.h"
@@ -96,21 +98,21 @@ class CryptManager
 		_DecStruct3T DecStruct3_D1D4B0[4];
 
 		// TR functions
-		int	__cdecl		TRPrepareBasic(unsigned __int8 *Output, unsigned __int8 *Input);
-		void __cdecl	TRKeyIntegrate(unsigned char *Key);
-		void __cdecl	TRKeyIntegrate2();
-		int __cdecl		TRKeyIntegrate3();
+		int		TRPrepareBasic(unsigned char *Output, unsigned char *Input);
+		void 	TRKeyIntegrate(unsigned char *Key);
+		void 	TRKeyIntegrate2();
+		int 		TRKeyIntegrate3();
 
-		int __cdecl		sub_A7D470(int a1, int a2);
-		int __cdecl		sub_A7D8D0_3(unsigned __int8 *DataP, unsigned __int8 *B_, unsigned __int8 *Out);
-		int __cdecl		sub_A7D790(unsigned __int8 *a1, unsigned __int8 *a2);
-		int __cdecl		sub_A7D4B0(unsigned __int8 *a1, unsigned __int8 *a2);
-		int __cdecl		sub_A7D5E0_5(unsigned __int8 *p1, unsigned __int8 *p2);
-		int __cdecl		sub_A7DA60_4(unsigned __int8 *d, int idx, unsigned __int8 *a3);
-		int __cdecl		sub_A7DC90_3(int idx, unsigned char *m, unsigned char *m2);
-		unsigned int __cdecl sub_A7DE00_2(unsigned char *DataP1, unsigned char *DataP2);
-		int __cdecl		sub_A7DFD0(unsigned __int8 *a1, unsigned __int8 *a2);
-		int __cdecl		sub_A7E190_1(unsigned __int8 *Data, int Len, int State);
+		int 		sub_A7D470(int a1, int a2);
+		int 		sub_A7D8D0_3(unsigned char *DataP, unsigned char *B_, unsigned char *Out);
+		int 		sub_A7D790(unsigned char *a1, unsigned char *a2);
+		int 		sub_A7D4B0(unsigned char *a1, unsigned char *a2);
+		int 		sub_A7D5E0_5(unsigned char *p1, unsigned char *p2);
+		int 		sub_A7DA60_4(unsigned char *d, int idx, unsigned char *a3);
+		int 		sub_A7DC90_3(int idx, unsigned char *m, unsigned char *m2);
+		unsigned int  sub_A7DE00_2(unsigned char *DataP1, unsigned char *DataP2);
+		int 		sub_A7DFD0(unsigned char *a1, unsigned char *a2);
+		int 		sub_A7E190_1(unsigned char *Data, int Len, int State);
 };
 
 #endif

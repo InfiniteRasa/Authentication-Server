@@ -71,9 +71,10 @@
 	unsigned int Net::NumericIP(SOCKET s)
 	{
 		sockaddr_in peername;
-		int pLen = sizeof(peername);
+		unsigned int pLen = sizeof(peername);
 		getsockname(s, (sockaddr*)&peername, &pLen);
-		unsigned int generatedIP = peername.sin_addr.S_un.S_addr;
+		unsigned int generatedIP = peername.sin_addr.s_addr;
+		//unsigned int generatedIP = peername.sin_addr.S_un.S_addr;
 		return generatedIP;
 	}
 	void Net::PrintIP(unsigned int IP)
