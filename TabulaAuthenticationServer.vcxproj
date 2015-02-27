@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EBBF13AF-6AB1-4508-9D04-0465CC236F1D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>bin\$(Configuration)\</OutDir>
+    <IntDir>build\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>bin\$(Configuration)\</OutDir>
+    <IntDir>build\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\libs\pthreads\;$(ProjectDir)\libs\mysql\;$(ProjectDir)\libs\minINI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(ProjectDir)\libs\mysql\;$(ProjectDir)\libs\pthreads\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libmysql.lib;ws2_32.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)libmysql.dll" "$(OutDir)"
+xcopy /y /d  "$(ProjectDir)pthreadVC2.dll" "$(OutDir)"
+xcopy /y /d  "$(ProjectDir)config.ini" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)\libs\pthreads\;$(ProjectDir)\libs\mysql\;$(ProjectDir)\libs\minINI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)\libs\mysql\;$(ProjectDir)\libs\pthreads\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libmysql.lib;ws2_32.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)libmysql.dll" "$(OutDir)"
+xcopy /y /d  "$(ProjectDir)pthreadVC2.dll" "$(OutDir)"
+xcopy /y /d  "$(ProjectDir)config.ini" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="libs\minini\minIni.c" />
+    <ClCompile Include="src\CryptManager.cpp" />
+    <ClCompile Include="src\DBManager.cpp" />
+    <ClCompile Include="src\INIParser.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MD5.cpp" />
+    <ClCompile Include="src\MessageHandler.cpp" />
+    <ClCompile Include="src\NetManager.cpp" />
+    <ClCompile Include="src\NetUtils.cpp" />
+    <ClCompile Include="src\SessionManager.cpp" />
+    <ClCompile Include="src\ThreadsUtils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libs\mysql\libmysql.def" />
+    <None Include="src\config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libs\minini\minGlue.h" />
+    <ClInclude Include="libs\minini\minIni.h" />
+    <ClInclude Include="libs\mysql\base64.h" />
+    <ClInclude Include="libs\mysql\config-netware.h" />
+    <ClInclude Include="libs\mysql\config-win.h" />
+    <ClInclude Include="libs\mysql\decimal.h" />
+    <ClInclude Include="libs\mysql\errmsg.h" />
+    <ClInclude Include="libs\mysql\ft_global.h" />
+    <ClInclude Include="libs\mysql\hash.h" />
+    <ClInclude Include="libs\mysql\heap.h" />
+    <ClInclude Include="libs\mysql\help_end.h" />
+    <ClInclude Include="libs\mysql\help_start.h" />
+    <ClInclude Include="libs\mysql\keycache.h" />
+    <ClInclude Include="libs\mysql\myisam.h" />
+    <ClInclude Include="libs\mysql\myisammrg.h" />
+    <ClInclude Include="libs\mysql\myisampack.h" />
+    <ClInclude Include="libs\mysql\mysql.h" />
+    <ClInclude Include="libs\mysql\mysqld_ername.h" />
+    <ClInclude Include="libs\mysql\mysqld_error.h" />
+    <ClInclude Include="libs\mysql\mysql_com.h" />
+    <ClInclude Include="libs\mysql\mysql_embed.h" />
+    <ClInclude Include="libs\mysql\mysql_time.h" />
+    <ClInclude Include="libs\mysql\mysql_version.h" />
+    <ClInclude Include="libs\mysql\mysys_err.h" />
+    <ClInclude Include="libs\mysql\my_aes.h" />
+    <ClInclude Include="libs\mysql\my_alarm.h" />
+    <ClInclude Include="libs\mysql\my_alloc.h" />
+    <ClInclude Include="libs\mysql\my_atomic.h" />
+    <ClInclude Include="libs\mysql\my_attribute.h" />
+    <ClInclude Include="libs\mysql\my_base.h" />
+    <ClInclude Include="libs\mysql\my_bit.h" />
+    <ClInclude Include="libs\mysql\my_bitmap.h" />
+    <ClInclude Include="libs\mysql\my_dbug.h" />
+    <ClInclude Include="libs\mysql\my_dir.h" />
+    <ClInclude Include="libs\mysql\my_getopt.h" />
+    <ClInclude Include="libs\mysql\my_global.h" />
+    <ClInclude Include="libs\mysql\my_handler.h" />
+    <ClInclude Include="libs\mysql\my_libwrap.h" />
+    <ClInclude Include="libs\mysql\my_list.h" />
+    <ClInclude Include="libs\mysql\my_md5.h" />
+    <ClInclude Include="libs\mysql\my_net.h" />
+    <ClInclude Include="libs\mysql\my_nosys.h" />
+    <ClInclude Include="libs\mysql\my_no_pthread.h" />
+    <ClInclude Include="libs\mysql\my_pthread.h" />
+    <ClInclude Include="libs\mysql\my_stacktrace.h" />
+    <ClInclude Include="libs\mysql\my_sys.h" />
+    <ClInclude Include="libs\mysql\my_time.h" />
+    <ClInclude Include="libs\mysql\my_tree.h" />
+    <ClInclude Include="libs\mysql\my_trie.h" />
+    <ClInclude Include="libs\mysql\my_uctype.h" />
+    <ClInclude Include="libs\mysql\my_user.h" />
+    <ClInclude Include="libs\mysql\my_vle.h" />
+    <ClInclude Include="libs\mysql\my_xml.h" />
+    <ClInclude Include="libs\mysql\m_ctype.h" />
+    <ClInclude Include="libs\mysql\m_string.h" />
+    <ClInclude Include="libs\mysql\queues.h" />
+    <ClInclude Include="libs\mysql\rijndael.h" />
+    <ClInclude Include="libs\mysql\sha1.h" />
+    <ClInclude Include="libs\mysql\sql_common.h" />
+    <ClInclude Include="libs\mysql\sql_state.h" />
+    <ClInclude Include="libs\mysql\sslopt-case.h" />
+    <ClInclude Include="libs\mysql\sslopt-longopts.h" />
+    <ClInclude Include="libs\mysql\sslopt-vars.h" />
+    <ClInclude Include="libs\mysql\thr_alarm.h" />
+    <ClInclude Include="libs\mysql\thr_lock.h" />
+    <ClInclude Include="libs\mysql\typelib.h" />
+    <ClInclude Include="libs\mysql\t_ctype.h" />
+    <ClInclude Include="libs\mysql\violite.h" />
+    <ClInclude Include="libs\pthreads\include\pthread.h" />
+    <ClInclude Include="libs\pthreads\include\sched.h" />
+    <ClInclude Include="libs\pthreads\include\semaphore.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\CryptManager.h" />
+    <ClInclude Include="src\DBManager.h" />
+    <ClInclude Include="src\INIParser.h" />
+    <ClInclude Include="src\MD5.h" />
+    <ClInclude Include="src\MessageHandler.h" />
+    <ClInclude Include="src\NetManager.h" />
+    <ClInclude Include="src\NetObjects.h" />
+    <ClInclude Include="src\NetUtils.h" />
+    <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\SessionManager.h" />
+    <ClInclude Include="src\ThreadsUtils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\icon_g.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TabulaAuthenticationServer.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
