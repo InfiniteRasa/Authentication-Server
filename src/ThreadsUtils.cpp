@@ -1,4 +1,5 @@
 #include "ThreadsUtils.h"
+#include <Windows.h>
 
 	void Thread::InitMutex(pthread_mutex_t* Mutex)
 	{

@@ -46,12 +46,13 @@
 
 	void Net::SetTimeout(SOCKET s, int time)
 	{
+		#ifdef _WIN32
+		int millis = time * 1000;
+		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char*)&millis, sizeof(millis));
+		#else
 		struct timeval timeout;
 		timeout.tv_sec = time;
 		timeout.tv_usec = 0;
-		#ifdef _WIN32
-		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
-		#else
 		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (void*)&timeout, sizeof(timeout));
 		#endif
 	}
@@ -71,7 +72,7 @@
 	unsigned int Net::NumericIP(SOCKET s)
 	{
 		sockaddr_in peername;
-		unsigned int pLen = sizeof(peername);
+		int pLen = sizeof(peername);
 		getsockname(s, (sockaddr*)&peername, &pLen);
 		unsigned int generatedIP = peername.sin_addr.s_addr;
 		//unsigned int generatedIP = peername.sin_addr.S_un.S_addr;
