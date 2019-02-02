@@ -1,12 +1,18 @@
-To run it on Windows:
-	- Setup a MySQL database (ex: usbwebserver)
-	- Import the bin/auth.sql file
-	- Modify the bin/config.ini file to fit your configuration
-	- Open AuthServer.exe
+To run it:
+	- Generate solution/makefiles with premake5
+	- Setup a MySQL database
+	- Import the sql/auth.sql file
+	- Modify the config.ini file to fit your configuration
+	- Launch irauth executable
 	- Open Tabula Rasa client
 	- Log in as test/test
-	- Nothing more without a game server
+	- ??????
 
+	Note for Linux:
+	- Install (default-)libmysqlclient-dev
+	- Run `mysql_config --cflags` and `mysql_config --libs` to find relevant folders
+	- Tested in Debian Stretch
+	
 ==================================
 
 Classes/Namespaces explanation:
@@ -19,47 +25,6 @@ NetManager     - along NetUtils, abstracts socket functions for crossplatfom wor
 ThreadUtils    - Simplifies threads usage
 MessageHandler - All the specific logic goes here, handles all the packets
 NetObjects     - Simplifies the opcode, packet and errors usage
-
-==================================
-
-To compile on Windows (at least in MSVC):
--------------------------------------------
-Include folders:
-	.\libs\minINI
-	.\libs\pthreads\include
-	.\libs\mysql
--------------------------------------------
-Lib folders:
-	.\libs\mysql
-	.\libs\pthreads\lib
--------------------------------------------
-Libs
-	libmysql.lib 
-	ws2_32.lib 
-	pthreadVC2.lib
--------------------------------------------
-Preprocessor:
-	_CRT_SECURE_NO_WARNINGS
-	INI_ANSIONLY
-	_TCHAR_DEFINED
-	
-==================================
-
-To compile on Linux:
--------------------------------------------
-install libmysqlclient-dev
--------------------------------------------
-Include folders:
-	./libs/minINI
-	`mysql_config --cflags`
--------------------------------------------
-Lib folders:
-	`mysql_config --libs`
-
-==================================
-
-CodeLite project (and makefile) for linux available.
-Tested on Debian 7.
 
 ==================================
 
