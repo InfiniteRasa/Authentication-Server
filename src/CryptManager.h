@@ -1,8 +1,8 @@
 // ToDo
 // Understand something lol
+// according to blumster it uses 3DES and Blowfish
 
-#ifndef TR_CRYPT_MANAGER_H
-#define TR_CRYPT_MANAGER_H
+#pragma once
 
 #ifdef _WIN32
 	#include "windows.h"
@@ -114,5 +114,3 @@ class CryptManager
 		int 		sub_A7DFD0(unsigned char *a1, unsigned char *a2);
 		int 		sub_A7E190_1(unsigned char *Data, int Len, int State);
 };
-
-#endif

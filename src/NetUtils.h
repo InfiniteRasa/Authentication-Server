@@ -1,5 +1,4 @@
-#ifndef TR_NET_UTILS_H
-#define TR_NET_UTILS_H
+#pragma once
 
 #include <stdio.h>
 #ifdef _WIN32
@@ -37,5 +36,3 @@ namespace Net
 	void PrintIP(unsigned int IP);
 	unsigned int IPtoHex(char* ip);
 }
-
-#endif

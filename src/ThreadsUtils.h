@@ -1,9 +1,9 @@
-#ifndef TR_THREADS_UTILS_H
-#define TR_THREADS_UTILS_H
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+
 #ifndef _WIN32
 #include <sys/time.h>
 #include <unistd.h>
@@ -32,4 +32,3 @@ namespace Thread
 	
 	unsigned long GetTicks();
 }
-#endif

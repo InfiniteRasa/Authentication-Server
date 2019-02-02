@@ -1,5 +1,4 @@
-#ifndef TR_NET_MANAGER_H
-#define TR_NET_MANAGER_H
+#pragma once
 
 #ifdef _WIN32
 	#include <winsock2.h>
@@ -38,5 +37,3 @@ class NetManager
 		SOCKET CreateSocket(unsigned short Port);
 
 };
-
-#endif

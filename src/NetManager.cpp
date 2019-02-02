@@ -4,8 +4,6 @@
 NetManager::NetManager(unsigned int Port)
 {
 	this->Port = Port;
-	this->Timeout.tv_sec = 1;
-	this->Timeout.tv_usec = 0;
 	this->Socket = CreateSocket(this->Port);
 	if (this->Socket == SOCKET_ERROR)
 	{
@@ -27,17 +25,8 @@ void NetManager::ResetFD()
 
 SOCKET NetManager::WaitForClient()
 {
-	// ToDo: Use just accept()
-	int r = select(0, &this->fd, NULL, NULL, &this->Timeout);
-	if (r && r != SOCKET_ERROR)
-	{
-		if( FD_ISSET(this->Socket, &this->fd) )
-		{
-			SOCKET ret = (SOCKET)accept(this->Socket, 0, 0);
-			return ret;
-		}
-	}
-	return -1;
+	SOCKET ret = accept(this->Socket, 0, 0);
+	return ret;
 }
 
 SOCKET NetManager::CreateSocket(unsigned short Port)

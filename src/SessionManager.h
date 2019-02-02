@@ -1,9 +1,7 @@
 // ToDo
 // Add IP to sessions for checking
 // Maybe change struct for class
-
-#ifndef TR_SESSION_MANAGER_H
-#define TR_SESSION_MANAGER_H
+#pragma once
 
 #ifdef _WIN32
 	#include <windows.h>
@@ -41,4 +39,4 @@ class SessionManager
 		unsigned long long GenerateUniqueKey();
 };
 
-#endif
+

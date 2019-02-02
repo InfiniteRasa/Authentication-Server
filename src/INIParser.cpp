@@ -1,4 +1,5 @@
 #include "INIParser.h"
+#include "minIni.h"
 
 INIParser::INIParser(const char* Filename)
 {

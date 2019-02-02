@@ -1,8 +1,6 @@
-#ifndef TR_INI_PARSER_H
-#define TR_INI_PARSER_H
+#pragma once
 
 #include <string>
-#include "minIni.h"
 
 class INIParser
 {
@@ -19,5 +17,3 @@ class INIParser
 	private:
 		std::string File;
 };
-
-#endif

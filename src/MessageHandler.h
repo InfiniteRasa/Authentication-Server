@@ -1,5 +1,4 @@
-#ifndef TR_MESSAGES_H
-#define TR_MESSAGES_H
+#pragma once
 
 #include <vector>
 #include "ThreadsUtils.h"
@@ -21,5 +20,3 @@ namespace HandleMessage
 	unsigned char AuthSelectServer(Player* player);				// By Client 
 	void LastPacket(Player* player, unsigned char ServerID);	// By Server
 }
-
-#endif

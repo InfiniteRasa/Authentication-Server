@@ -46,15 +46,17 @@
 
 	void Net::SetTimeout(SOCKET s, int time)
 	{
-		#ifdef _WIN32
+		// this seems to cause problems since ever
+		// https://stackoverflow.com/questions/12744522/getting-random-10060-conn-timeout-errors-on-a-server-socket
+	#ifdef _WIN32
 		int millis = time * 1000;
-		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char*)&millis, sizeof(millis));
-		#else
+		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const char*)&millis, sizeof(millis));
+	#else
 		struct timeval timeout;
 		timeout.tv_sec = time;
 		timeout.tv_usec = 0;
 		setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (void*)&timeout, sizeof(timeout));
-		#endif
+	#endif
 	}
 
 	void Net::Close(SOCKET s)
@@ -72,7 +74,12 @@
 	unsigned int Net::NumericIP(SOCKET s)
 	{
 		sockaddr_in peername;
-		int pLen = sizeof(peername);
+		#ifdef _WIN32
+		int pLen;
+		#else
+		unsigned int pLen;
+		#endif
+		pLen = sizeof(peername);
 		getsockname(s, (sockaddr*)&peername, &pLen);
 		unsigned int generatedIP = peername.sin_addr.s_addr;
 		//unsigned int generatedIP = peername.sin_addr.S_un.S_addr;

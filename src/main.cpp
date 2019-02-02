@@ -24,9 +24,9 @@ unsigned int ClientsNow();
 int main(int argc, char *argv[])
 {
 	printf(" ==============================================================================\r\n");
-	printf("                                  Tabula Rasa                                  \r\n");
+	printf("                                 Infinite Rasa                                 \r\n");
 	printf("                             Authentication Server                             \r\n\r\n");
-	printf("  Version 0.4.1                                                     Salsa Crew \r\n");
+	printf("  Version 0.5.0                                                     Salsa Crew \r\n");
 	printf(" ==============================================================================\r\n");
 	printf("Loading...\r\n");
 
@@ -160,7 +160,8 @@ void* PlayerHandling(void* Parameter)
 {
 	Player player;
 	player.socket = (SOCKET)Parameter;
-	Net::SetTimeout(player.socket, 3); // 3 seconds of timeout for each recv
+	// lets keep this out, as theres no reason to keep it right now
+	//Net::SetTimeout(player.socket, 5); // 5 seconds of timeout for each recv
 
 	HandleMessage::AuthHello(&player);
 	if (Net::Receive(player.socket, (char*)player.RecvBuffer, 0x32, true) < 1)

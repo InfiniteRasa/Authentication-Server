@@ -1,5 +1,4 @@
-#ifndef TR_DB_MANAGER_H
-#define TR_DB_MANAGER_H
+#pragma once
 
 #include <stdio.h>
 #include <string>
@@ -41,4 +40,3 @@ class DBManager
 		std::string			dbPass;
 		std::string			UsersTable;
 };
-#endif
