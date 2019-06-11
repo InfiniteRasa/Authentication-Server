@@ -152,6 +152,7 @@ void* PlayersThread(void* Parameter)
 		}
 		Thread::Wait(100);
 	}
+	delete NetMgr;
 	Thread::Exit();
 	return 0;
 }
